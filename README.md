@@ -8,6 +8,6 @@ Find out images that are similar to the specified one within given image set.
 * more...
 
 CHANGELOG
-=========
+---------
 
 + 13/1/23 core prototype completed
