@@ -24,4 +24,5 @@ DEPENDENCY
 CHANGELOG
 ---------
 
-+ 13/1/23 core prototype completed
++ 13/01/24 fixed bugs in lib/disjoint_set.py
++ 13/01/23 core prototype completed
