@@ -3,7 +3,7 @@ Simple CBIR with Simple PHA
 
 Find out images that are similar to the specified one within given image set.
 
-* gui (pyqt if nothing else)
+* gui (web app or pyqt if nothing else)
 * replaceable hash algorithm
 * more...
 
