@@ -3,42 +3,51 @@ from collections import defaultdict
 class DisjointSet(object):
     def __init__(self):
         self.d = defaultdict(set)
+        self.inverse = {}
 
 
-    def insert(self, value, father):
-        father_equiv_elem = self.get_equiv_elem(father)
-        value_equiv_elem = self.get_equiv_elem(value)
+    def _register(self, father, elem):
+        self.d[father].add(elem)
+        self.inverse[elem] = father
 
-        if father_equiv_elem and father_equiv_elem == value_equiv_elem:
-            return
 
-        if father_equiv_elem:
-            if value_equiv_elem:
-                self.d[father_equiv_elem] |= self.d[value_equiv_elem]
-                del self.d[value_equiv_elem]
-            else:
-                self.d[father_equiv_elem].add(value)
+    def _init_set(self, equiv_elem):
+        s = self.d[equiv_elem]
+        if not s:
+            s.add(equiv_elem)
+            self.inverse[equiv_elem] = equiv_elem
+
+
+    def insert(self, elem1, elem2):
+        equiv_elem1 = self.get_equiv_elem(elem1)
+        equiv_elem2 = self.get_equiv_elem(elem2)
+
+        self._init_set(equiv_elem2)
+        self._init_set(equiv_elem1)
+
+        if equiv_elem2 == equiv_elem1:
+            pass
         else:
-            if value_equiv_elem:
-                self.d[value_equiv_elem].add(father)
-            else:
-                self.d[father].add(value)
-                self.d[father].add(father)
+            self.d[equiv_elem2] |= self.d[equiv_elem1]
+            self.inverse.update(
+                {elem: equiv_elem2 for elem in self.d[equiv_elem1]}
+            )
+            del self.d[equiv_elem1]
 
 
     def sets(self):
         return self.d.values()
 
 
-    def get_equiv_elem(self, value):
-        for key, values in self.d.iteritems():
-            if value in values:
-                return key
-        return None
+    def get_equiv_elem(self, elem):
+        for equiv_elem, elements in self.d.iteritems():
+            if elem in elements:
+                return equiv_elem
+        return elem
 
 
-    def query(self, value1, value2):
-        return self.get_equiv_elem(value1) == self.get_equiv_elem(value2)
+    def query(self, elem1, elem2):
+        return self.get_equiv_elem(elem1) == self.get_equiv_elem(elem2)
 
 
     def __iter__(self):
@@ -57,3 +66,6 @@ if __name__ == '__main__':
     print disjoint_set.query(4, 5)
     print disjoint_set.query(6, 4)
     print disjoint_set.sets()
+
+    print disjoint_set.inverse
+

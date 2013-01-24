@@ -29,3 +29,6 @@ if __name__ == '__main__':
     for s in img_set:
         print s
 
+    print '% 30s % 30s' % ('value', 'key')
+    for pair in img_set.inverse.iteritems():
+        print map(lambda (h, f): ('%016x' % h, f), pair)
