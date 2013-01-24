@@ -11,9 +11,13 @@ __CONST_WIDTH = 8
 __CONST_HEIGHT = 8
 __CONST_POSTERIZE_BIT = 6    # 64 = 2 ** 6
 __CONST_SIZE = (__CONST_WIDTH, __CONST_HEIGHT)
-__CONST_COORDINATES = product(*map(range, __CONST_SIZE))
-__CONST_PIXEL_COUNT = operator.mul(*__CONST_SIZE)
+__CONST_COORDINATES = tuple(product(*map(range, __CONST_SIZE)))    # itertools.product returns an iterator which will
+__CONST_PIXEL_COUNT = operator.mul(*__CONST_SIZE)                  # exhaust after first iteration
 __CONST_PIXEL_COUNT_FLOAT = float(__CONST_PIXEL_COUNT)
+__CONST_PIXEL_COUNT_LIST = range(__CONST_PIXEL_COUNT)
+__CONST_HASH_REDUCE_FUNC = lambda avg, pixels: (
+    lambda hash, i: (hash + (0 if pixels[i % __CONST_WIDTH, i / __CONST_HEIGHT] < avg else 1)) << 1
+)
 
 
 def __get_hash(im_path, size=(8, 8), posterize=False):
@@ -44,8 +48,8 @@ def get_hash(im_path, size=__CONST_SIZE, posterize=False):
 
     pixels = im.load()
     avg = sum([pixels[coord] for coord in __CONST_COORDINATES]) / __CONST_PIXEL_COUNT_FLOAT
-    hash = reduce(lambda hash, i: (hash + (0 if pixels[i % __CONST_WIDTH, i / __CONST_HEIGHT] < avg else 1)) << 1,
-                  range(operator.mul(*size)),
+    hash = reduce(__CONST_HASH_REDUCE_FUNC(avg, pixels),
+                  __CONST_PIXEL_COUNT_LIST,
                   0) >> 1    # after 64 left-shifts, the result is 65bit, need shift right once to get a 64bit hash
 
     return hash

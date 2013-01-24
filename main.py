@@ -13,10 +13,13 @@ if __name__ == '__main__':
         hash = pha.get_hash(os.path.join(image_lib_path, filename))
         hashes.append((hash, filename.decode('gbk').encode('utf-8')))
 
+    for pair in hashes:
+        img_set.union(pair, pair)
+
     for (h1, f1), (h2, f2) in combinations(hashes, 2):
         cnt = bin(h1 ^ h2).count('1')
         if cnt <= confidence:
-            img_set.insert((h1, f1), (h2, f2))
+            img_set.union((h1, f1), (h2, f2))
 
 
         print '-' * 64

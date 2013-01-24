@@ -18,7 +18,7 @@ class DisjointSet(object):
             self.inverse[equiv_elem] = equiv_elem
 
 
-    def insert(self, elem1, elem2):
+    def union(self, elem1, elem2):
         equiv_elem1 = self.get_equiv_elem(elem1)
         equiv_elem2 = self.get_equiv_elem(elem2)
 
@@ -57,10 +57,10 @@ class DisjointSet(object):
 
 if __name__ == '__main__':
     disjoint_set = DisjointSet()
-    disjoint_set.insert(1, 1)
-    disjoint_set.insert(2, 1)
-    disjoint_set.insert(3, 1)
-    disjoint_set.insert(5, 4)
+    disjoint_set.union(1, 1)
+    disjoint_set.union(2, 1)
+    disjoint_set.union(3, 1)
+    disjoint_set.union(5, 4)
     print disjoint_set.query(1, 2)
     print disjoint_set.query(3, 5)
     print disjoint_set.query(4, 5)
