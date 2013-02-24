@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block style %}
+    {{ super() }}
+
+    <style type="text/css">
+        .center {
+            text-align: center;
+        }
+        #dropbox .placeholder {
+            font-size: 11px;
+            text-align: center;
+            display: block;
+
+        }
+    </style>
+{% endblock %}
+
+{% block body_content %}
+    {{ super() }}
+
+    <div class="container" id="main">
+        <h3 class="center">Simple CBIR with simple PHA</h3>
+        <div id="dropbox">
+            <span class="placeholder">
+                请拖放图片到这
+            </span>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block bootstrap_js_bottom %}
+    {{ super() }}
+
+    <script src="/static/jquery.filedrop.js" type="text/javascript"></script>
+    <script src="/static/upload.js" type="text/javascript"></script>
+{% endblock %}
+

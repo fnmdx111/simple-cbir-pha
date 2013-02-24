@@ -2,12 +2,15 @@
 
 from itertools import combinations
 import os
-from lib import pha
-from lib.constants import IMAGE_LIBRARY_PATH as image_lib_path, confidence
-from lib.disjoint_set import DisjointSet
+from web.lib import pha
+from web.lib.constants import IMAGE_LIBRARY_PATH, confidence
+from web.lib.disjoint_set import DisjointSet
 
 
 if __name__ == '__main__':
+    print os.getcwd()
+    image_lib_path = os.path.join('web', IMAGE_LIBRARY_PATH)
+
     hashes, img_set = [], DisjointSet()
     for filename in os.listdir(image_lib_path):
         hash = pha.get_hash(os.path.join(image_lib_path, filename))

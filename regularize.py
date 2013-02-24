@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import os
-from lib.constants import IMAGE_LIBRARY_PATH
+from web.lib.constants import IMAGE_LIBRARY_PATH
 
 if __name__ == '__main__':
     concat_img_lib_path = lambda filename: os.path.join(IMAGE_LIBRARY_PATH, filename)
