@@ -6,26 +6,57 @@
     <style type="text/css">
         .center {
             text-align: center;
-        }
-        #dropbox .placeholder {
-            font-size: 11px;
-            text-align: center;
-            display: block;
-
+            margin: 0 auto;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dropbox.css') }}" />
 {% endblock %}
+
+
+{% block home_active %}
+    class="active"
+{% endblock %}
+
+{% block img_lib_active %}
+    class=""
+{% endblock %}
+
 
 {% block body_content %}
     {{ super() }}
 
     <div class="container" id="main">
-        <h3 class="center">Simple CBIR with simple PHA</h3>
-        <div id="dropbox">
-            <span class="placeholder">
-                请拖放图片到这
-            </span>
-        </div>
+        <h3 class="center">CBIR-PHA检索页</h3>
+        <form id="rri_form"
+              action="{{ url_for('query_resemble_images_by_url') }}"
+              method="post"
+              class="center form-search">
+            <fieldset>
+                <input type="text" placeholder="请输入图片URL" name="url" style="width: 75%" class="search-query"/>
+                <input class="btn" type="button" value="检索" onclick="retrieve_by_url()">
+            </fieldset>
+        </form>
+        <form id="rri_hash_form"
+              action="{{ url_for('query_resemble_images_by_hash') }}"
+              method="post"
+              class="center form-search"
+              style="margin-top: 5px">
+            <fieldset>
+                <input type="text" placeholder="请输入图片hash" name="hash" style="width: 75%" class="search-query"/>
+                <input class="btn" type="button" value="检索" onclick="retrieve_by_hash()">
+            </fieldset>
+        </form>
+        <img id="loader"
+             src="{{ url_for('static', filename='loader.gif') }}"
+             alt="loader"
+             style="display: none" />
+        <table id="result_table" style="width: 60%; margin-top: 20px;" class="table table-hover center">
+        </table>
+        <p class="center footer" style="margin-top: 30px">测试请用
+            <a href="http://www.stars-enceintes.com/wp-content/themes/fashionpro/includes/timthumb.php?src=http://www.stars-enceintes.com/wp-content/uploads/2011/12/alyson-hannigan-enceinte.jpg&h=90&w=90&zc=1&dur=1651">
+                这个链接
+            </a>
+        </p>
     </div>
 {% endblock %}
 
@@ -33,7 +64,60 @@
 {% block bootstrap_js_bottom %}
     {{ super() }}
 
-    <script src="/static/jquery.filedrop.js" type="text/javascript"></script>
-    <script src="/static/upload.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var gen_submit_retrieve = function (url, form_id, name) {
+            return function () {
+                var form = $('#' + form_id);
+                var loader = $('#loader');
+                var result_table = $('#result_table');
+
+                form.hide();
+                loader.show();
+                result_table.hide();
+
+                // test url: http://www.stars-enceintes.com/wp-content/themes/fashionpro/includes/timthumb.php?src=http://www.stars-enceintes.com/wp-content/uploads/2011/12/alyson-hannigan-enceinte.jpg&h=90&w=90&zc=1&dur=1651
+                $.post(url, {
+                           param: form.find('input[name="' + name + '"]').val()
+                       }, function (response) {
+                    loader.hide();
+                    form.show();
+
+                    var table = '' +
+                            '<thead>' +
+                                '<tr>' +
+                                    '<th>#</th>' +
+                                    '<th>Hash值</th>' +
+                                    '<th>链接（文件名）</th>' +
+                                '</tr>' +
+                            '</thead><tbody>';
+                    $.each(response['result'], function (idx, content) {
+                        var hash = content[0],
+                            filename = content[1];
+                        table += '' +
+                                '<tr>' +
+                                    '<td>' + idx + '</td>' +
+                                    '<td>' +
+                                        '<code>' + hash + '</code>' +
+                                    '</td>' +
+                                    '<td>' +
+                                        '<a href="static/images/' + filename + '" target="_self">' + filename + '</a>' +
+                                    '</td>' +
+                                '</tr>';
+                    });
+                    table += '</tbody></table>';
+
+                    result_table.html(table);
+                    result_table.show();
+                });
+            }
+        };
+        var retrieve_by_url = gen_submit_retrieve('{{ url_for('query_resemble_images_by_url') }}', 'rri_form', 'url');
+        var retrieve_by_hash = gen_submit_retrieve('{{ url_for('query_resemble_images_by_hash') }}',
+                                                   'rri_hash_form',
+                                                   'hash');
+    </script>
+
+    <script src="{{ url_for('static', filename='jquery.filedrop.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='upload.js') }}" type="text/javascript"></script>
 {% endblock %}
 

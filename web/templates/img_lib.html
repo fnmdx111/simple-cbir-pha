@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block style %}
+    {{ super() }}
+    <style type="text/css">
+        .center {
+            text-align: center;
+            margin: 0 auto;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dropbox.css') }}" />
+{% endblock %}
+
+
+{% block home_active %}
+    class=""
+{% endblock %}
+
+{% block img_lib_active %}
+    class="active"
+{% endblock %}
+
+
+{% block body_content %}
+    {{ super() }}
+
+    <div class="container" id="main">
+        <h3 class="center">图片库</h3>
+        <div id="dropbox">
+            <span class="placeholder">
+                请拖放图片到这
+            </span>
+        </div>
+        <table id="lib" class="table table-hover center">
+        </table>
+    </div>
+{% endblock %}
+
+{% block bootstrap_js_bottom %}
+    {{ super() }}
+    <script type="text/javascript">
+        var refresh_image_library = function () {
+            $.post('{{ url_for("get_image_library") }}', {}, function (response) {
+                var result_table = $('#lib');
+                var table = '' +
+                        '<thead>' +
+                            '<tr>' +
+                                '<th>#</th>' +
+                                '<th>Hash值</th>' +
+                                '<th>链接（文件名）</th>' +
+                                '<th>组</th>' +
+                            '</tr>' +
+                        '</thead><tbody>';
+                $.each(response['result'], function (idx, content) {
+                    var hash = content[0],
+                        filename = content[1],
+                        set_no = content[2];
+                    table += '' +
+                            '<tr>' +
+                                '<td>' + idx + '</td>' +
+                                '<td>' +
+                                    '<code>' + hash + '</code>' +
+                                '</td>' +
+                                '<td>' +
+                                    '<a href="static/images/' + filename + '" target="_self">' + filename + '</a>' +
+                                '</td>' +
+                                '<td>' + set_no + '</td>' +
+                            '</tr>';
+                });
+                table += '</tbody></table>';
+
+                result_table.html(table);
+            })
+        };
+        $(refresh_image_library);
+    </script>
+    <script src="{{ url_for('static', filename='jquery.filedrop.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='upload.js') }}" type="text/javascript"></script>
+{% endblock %}
+
+

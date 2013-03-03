@@ -13,10 +13,10 @@
                 <a class="brand" href="./home.html">SimpleCBIR</a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
-                        <li class="active">
+                        <li {%- block home_active -%}{%- endblock -%}>
                             <a href="{{ url_for('home') }}"><i class="icon-home"></i> 主页</a>
                         </li>
-                        <li>
+                        <li {%- block img_lib_active -%}{%- endblock -%}>
                             <a href="{{ url_for('image_library') }}"><i class="icon-picture"></i> 图片库</a>
                         </li>
                     </ul>

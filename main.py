@@ -1,4 +1,5 @@
 # encoding: utf-8
+# This module has been deprecated.
 
 from itertools import combinations
 import os
@@ -13,8 +14,8 @@ if __name__ == '__main__':
 
     hashes, img_set = [], DisjointSet()
     for filename in os.listdir(image_lib_path):
-        hash = pha.get_hash(os.path.join(image_lib_path, filename))
-        hashes.append((hash, filename.decode('gbk').encode('utf-8')))
+        _hash = pha.get_hash(os.path.join(image_lib_path, filename))
+        hashes.append((_hash, filename.decode('gbk').encode('utf-8')))
 
     for pair in hashes:
         img_set.union(pair, pair)
@@ -23,7 +24,6 @@ if __name__ == '__main__':
         cnt = bin(h1 ^ h2).count('1')
         if cnt <= confidence:
             img_set.union((h1, f1), (h2, f2))
-
 
         print '-' * 64
         print '%016x' % h1, '%016x' % h2
