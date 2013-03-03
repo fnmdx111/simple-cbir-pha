@@ -24,5 +24,6 @@ DEPENDENCY
 CHANGELOG
 ---------
 
++ 13/03/03 complete retrieve images by url and hash, retrieving by uploading local image has been delayed
 + 13/01/24 fixed bugs in lib/disjoint_set.py
 + 13/01/23 core prototype completed
