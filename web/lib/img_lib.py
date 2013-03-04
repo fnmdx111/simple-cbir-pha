@@ -5,6 +5,7 @@ from itertools import combinations
 import os
 import urllib2
 import operator
+import Image
 from web.lib import constants
 from web.lib.disjoint_set import DisjointSet
 from web.lib.misc import prefix
@@ -97,4 +98,17 @@ class ImageLibrary(object):
 
     def all(self):
         return reduce(operator.or_, self.img_set.d.values(), set())
+
+
+    def get_thumbnail(self, filename, size=(75, 75), anti_alias=True):
+        path = os.path.realpath(os.path.join(self.image_lib_path, filename))
+
+        image = Image.open(path)
+        image.thumbnail(size, Image.ANTIALIAS if anti_alias else Image.NEAREST)
+
+        thumbnail = StringIO()
+        image.save(thumbnail, image.format)
+        thumbnail.seek(0)
+
+        return thumbnail
 

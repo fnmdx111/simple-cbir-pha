@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import os
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, send_from_directory, send_file
 from werkzeug.utils import secure_filename
 from web import app, img_lib
 from web.lib import misc
@@ -68,5 +68,15 @@ def query_resemble_images_by_hash():
     print result
 
     return jsonify(result=result)
+
+
+@app.route('/serve/<path:filename>', methods=['GET'])
+def serve_image(filename):
+    return send_from_directory(img_lib.image_lib_path, filename)
+
+
+@app.route('/thumb/<path:filename>', methods=['GET'])
+def serve_thumbnail(filename):
+    return send_file(img_lib.get_thumbnail(filename))
 
 

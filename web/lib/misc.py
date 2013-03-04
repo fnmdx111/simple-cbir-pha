@@ -6,9 +6,9 @@ identity = lambda _: _
 extension = lambda filename: filename.rsplit('.', 1)[-1]
 
 if os.path.basename(os.getcwd()) == 'web': # directly running __init__.py
-    prefix = 'static'
+    prefix = '..'
 else:
-    prefix = 'web/static'
+    prefix = ''
 
 
 def _reduce_func(acc, filename):
@@ -23,8 +23,5 @@ def get_img_count():
 
 
 def _hex(key):
-    k = hex(key)
-    if 'L' in k:
-        k = k[:-1]
-    return k
+    return '0x%016x' % key
 

@@ -87,7 +87,8 @@
                                 '<tr>' +
                                     '<th>#</th>' +
                                     '<th>Hash值</th>' +
-                                    '<th>链接（文件名）</th>' +
+                                    '<th>文件名</th>' +
+                                    '<th>预览' +
                                 '</tr>' +
                             '</thead><tbody>';
                     $.each(response['result'], function (idx, content) {
@@ -100,7 +101,10 @@
                                         '<code>' + hash + '</code>' +
                                     '</td>' +
                                     '<td>' +
-                                        '<a href="static/images/' + filename + '" target="_self">' + filename + '</a>' +
+                                        '<a href="serve/' + filename + '">' + filename + '</a>' +
+                                    '</td>' +
+                                    '<td>' +
+                                        '<img src="thumb/' + filename + '" />' +
                                     '</td>' +
                                 '</tr>';
                     });
